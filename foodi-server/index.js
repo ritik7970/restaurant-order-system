@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-//console.log(process.env.S3_BUCKET)
 
 // middleware
 app.use(cors());
