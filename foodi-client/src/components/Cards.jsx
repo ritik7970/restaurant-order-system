@@ -25,8 +25,15 @@ const Cards = ({ item }) => {
     // console.log(item);
     if(user && user.email){
         const cartItem = {menuItemId: _id, name, quantity : 1, image, price, email: user.email}
+        const token = localStorage.getItem('access-token')
 
-        axios.post('http://localhost:6001/carts', cartItem)
+        axios.post('http://localhost:6001/carts'
+          ,cartItem,
+             {
+            headers: {
+              authorization: `Bearer ${token}` // Add the token to the headers
+            }
+          }, )
         .then((response) => {
           console.log(response);
           if(response){

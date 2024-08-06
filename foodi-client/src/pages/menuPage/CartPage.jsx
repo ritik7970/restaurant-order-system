@@ -19,10 +19,12 @@ const CartPage = () => {
   };
   // Handle quantity increase
   const handleIncrease = async (item) => {
+    const token = localStorage.getItem('access-token')
     try {
       const response = await fetch(`http://localhost:6001/carts/${item._id}`, {
         method: "PUT",
         headers: {
+          authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ quantity: item.quantity + 1 }),
@@ -49,6 +51,7 @@ const CartPage = () => {
   };
   // Handle quantity decrease
   const handleDecrease = async (item) => {
+    const token = localStorage.getItem('access-token')
     if (item.quantity > 1) {
       try {
         const response = await fetch(
@@ -56,6 +59,7 @@ const CartPage = () => {
           {
             method: "PUT",
             headers: {
+              authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ quantity: item.quantity - 1 }),
@@ -94,6 +98,8 @@ const CartPage = () => {
 
   // delete an item
   const handleDelete =   (item) => {
+    const token = localStorage.getItem('access-token');
+    console.log(token);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -104,7 +110,13 @@ const CartPage = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:6001/carts/${item._id}`).then(response => {
+        axios.delete(`http://localhost:6001/carts/${item._id}`,
+             {
+            headers: {
+              authorization: `Bearer ${token}` // Add the token to the headers
+            }
+          }
+        ).then(response => {
           if (response) {
             refetch();
              Swal.fire("Deleted!", "Your file has been deleted.", "success");
